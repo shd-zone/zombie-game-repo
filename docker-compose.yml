@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  zombie-game:
+    build: .
+    container_name: zombie_survival_game
+    restart: unless-stopped
