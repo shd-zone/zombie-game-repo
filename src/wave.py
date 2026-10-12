@@ -1,4 +1,5 @@
 import random
+import pygame
 from settings import *
 from zombie import Zombie
 

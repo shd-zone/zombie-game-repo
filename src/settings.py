@@ -1,3 +1,6 @@
+import os
+# Root Directory setup
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Screen Dimensions
 WIDTH = 1280
 HEIGHT = 720
