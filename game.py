@@ -1,8 +1,8 @@
 import pygame
 import sys
+
 from settings import *
 from player import Player
-from zombie import Zombie
 from wave import WaveManager
 from ui import UI
 from utils import load_sound
@@ -11,14 +11,17 @@ from utils import load_sound
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.mixer.init()
+
+        self.shoot_sound = None
+        try:
+            pygame.mixer.init()
+            self.shoot_sound = load_sound("sounds/shoot.wav")
+        except Exception as e:
+            print("Audio disabled:", e)
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(TITLE)
-
         self.clock = pygame.time.Clock()
-
-        self.shoot_sound = load_sound("sounds/shoot.wav")
 
     def new(self):
         self.all_sprites = pygame.sprite.Group()
@@ -30,10 +33,11 @@ class Game:
         self.wave_manager = WaveManager(self)
         self.ui = UI(self)
 
-        # Score
         self.score = 0
 
     def run(self):
+        print("RUN STARTED")
+
         self.playing = True
 
         while self.playing:
@@ -55,7 +59,6 @@ class Game:
         self.all_sprites.update()
         self.wave_manager.update()
 
-        # Bullet hits Zombie
         hits = pygame.sprite.groupcollide(
             self.zombies,
             self.bullets,
@@ -83,17 +86,14 @@ class Game:
         waiting = True
 
         while waiting:
-
             self.ui.show_game_over(self.screen)
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
                 if event.type == pygame.KEYDOWN:
-
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
